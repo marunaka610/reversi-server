@@ -1,0 +1,21 @@
+[package]
+name = "reversi-server"
+version = "0.1.0"
+authors = ["kanamarutakuya"]
+edition = "2018"
+
+[dependencies]
+actix-web = "3"
+chrono="0.4.19"
+actix-cors = "0.5"
+diesel = { version = "1.4.4", features = ["postgres"] }
+dotenv = "0.15.0"
+env_logger = "0.8"
+futures = "0.3"
+rand = "0.7"
+tokio = { version = "0.2", features = ["macros", "rt-core"] }
+juniper_actix = { version = "0.2.1", features = ["subscriptions"] }
+juniper = { version = "0.15.1",  features = ["expose-test-schema"] }
+juniper_graphql_ws = "0.2.1"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
