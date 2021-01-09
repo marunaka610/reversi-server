@@ -1,5 +1,5 @@
-mod game;
 mod app;
+mod domain;
 mod infrastructure;
 
 use actix_cors::Cors;

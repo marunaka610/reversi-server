@@ -1,4 +1,1 @@
-pub mod human;
-pub mod droid;
-pub mod episode;
-pub mod charactor;
+pub mod game_info_entity;

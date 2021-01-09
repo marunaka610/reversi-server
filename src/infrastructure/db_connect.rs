@@ -15,10 +15,10 @@ pub fn establish_connection() -> MysqlConnection {
   MysqlConnection::establish(&database_url).expect(&format!("Error connecting to {}", database_url))
 }
 
-pub fn establish_connection_sqlite() -> SqliteConnection {
-  dotenv().ok();
+// pub fn establish_connection_sqlite() -> SqliteConnection {
+//   dotenv().ok();
 
-  let database_url = "reversi.db";
-  SqliteConnection::establish(&database_url)
-    .expect(&format!("Error connecting to {}", database_url))
-}
+//   let database_url = "reversi.db";
+//   SqliteConnection::establish(&database_url)
+//     .expect(&format!("Error connecting to {}", database_url))
+// }

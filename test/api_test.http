@@ -5,8 +5,12 @@
 
 
 ### ゲーム情報
-@query = {gameInfo(id:"100"){gameId%20state}}
-GET {{baseUrl}}/graphql?query={{query}}
+@query_gameInfos = {gameInfos{gameId%20state}}
+GET {{baseUrl}}/graphql?query={{query_gameInfos}}
 
+
+### ゲーム情報
+@query_gameInfo = {gameInfo(id:2){gameId%20state}}
+GET {{baseUrl}}/graphql?query={{query_gameInfo}}
 
 

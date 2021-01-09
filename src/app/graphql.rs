@@ -19,9 +19,9 @@ use juniper_graphql_ws::ConnectionConfig;
 use super::super::infrastructure::database::{
   //
   Database,
-  Query,
   Subscription,
 };
+use super::query::*;
 use std::{
   // 
   time::Duration,

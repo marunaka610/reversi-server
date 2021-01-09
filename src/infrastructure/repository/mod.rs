@@ -1,1 +1,1 @@
-pub mod info_rep;
+pub mod game_info_repository;
