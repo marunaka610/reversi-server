@@ -4,18 +4,19 @@
   // 詳細情報は次を確認してください: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
   "configurations": [
+
     {
       "type": "lldb",
       "request": "launch",
-      "name": "Debug executable 'reversi-server'",
+      "name": "Debug executable 'reversi_server'",
       "cargo": {
         "args": [
           "build",
-          "--bin=reversi-server",
-          "--package=reversi-server"
+          "--bin=reversi_server",
+          "--package=reversi_server"
         ],
         "filter": {
-          "name": "reversi-server",
+          "name": "reversi_server",
           "kind": "bin"
         }
       },
@@ -25,16 +26,16 @@
     {
       "type": "lldb",
       "request": "launch",
-      "name": "Debug unit tests in executable 'reversi-server'",
+      "name": "Debug unit tests in executable 'reversi_server'",
       "cargo": {
         "args": [
           "test",
           "--no-run",
-          "--bin=reversi-server",
-          "--package=reversi-server"
+          "--bin=reversi_server",
+          "--package=reversi_server"
         ],
         "filter": {
-          "name": "reversi-server",
+          "name": "reversi_server",
           "kind": "bin"
         }
       },

@@ -1,21 +1,25 @@
-use chrono::{Utc, Local, DateTime, Date};
-use  std::io;
-use serde_json::{json};
+use chrono::{DateTime, Local};
+// use chrono::{Date, DateTime, Local, Utc};
+// use  std::io;
+// use serde_json::{json};
+use diesel::Queryable;
 use serde::Deserialize;
 
 #[derive(Deserialize, Debug)]
-pub struct ProgressJson{
-  pub game_id : u128,
-  pub piecies : u128,
+pub struct ProgressJson {
+  pub game_id: u128,
+  pub piecies: u128,
 }
-pub struct Progress{
-  pub game_id : u128,
-  pub piecies : u128,
-  pub time : DateTime<Local>
+
+#[derive(Queryable)]
+pub struct Progress {
+  pub game_id: u128,
+  pub piecies: u128,
+  pub time: DateTime<Local>,
 }
 
 impl Progress {
-  pub fn new(game_id : u128, piecies : u128) -> Progress {
+  pub fn new(game_id: u128, piecies: u128) -> Progress {
     Progress {
       game_id: game_id,
       piecies: piecies,
@@ -33,8 +37,8 @@ impl Progress {
   // }
 }
 
-enum Piece {
-  None = 0,
-  Black = 1,
-  White = -1
-}
+// enum Piece {
+//   None = 0,
+//   Black = 1,
+//   White = -1,
+// }

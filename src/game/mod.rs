@@ -1,2 +1,2 @@
-mod info;
-mod progress;
+pub mod info;
+pub mod progress;

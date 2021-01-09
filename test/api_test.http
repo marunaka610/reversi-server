@@ -1,0 +1,12 @@
+@hostname = localhost
+@port = 8080
+@baseUrl = http://{{hostname}}:{{port}}
+@contentType = application/json
+
+
+### ゲーム情報
+@query = {gameInfo(id:"100"){gameId%20state}}
+GET {{baseUrl}}/graphql?query={{query}}
+
+
+
