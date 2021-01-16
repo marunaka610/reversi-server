@@ -3,7 +3,6 @@ use juniper::{
   //
   graphql_object,
   graphql_subscription,
-  Context,
   DefaultScalarValue,
   FieldError,
 };
@@ -12,24 +11,16 @@ use std::{
   pin::Pin,
   time::Duration,
 };
-
-// データベースの宣言。実装は各repositoryにて。
-#[derive(Default, Clone)]
-pub struct Database {}
-impl Database {
-  pub fn new() -> Database {
-    Database {}
-  }
-}
-
-impl Context for Database {}
+use super::{
+  super::app::app_context::AppContext,
+};
 
 // ロジックの型だとおもう
 struct RandomHuman {
   id: String,
   name: String,
 }
-#[graphql_object(context = Database)]
+#[graphql_object(context = AppContext)]
 impl RandomHuman {
   fn id(&self) -> &str {
     &self.id
@@ -44,12 +35,12 @@ type RandomHumanStream =
 
 // 変更通知
 pub struct Subscription;
-#[graphql_subscription(context = Database)]
+#[graphql_subscription(context = AppContext)]
 impl Subscription {
   #[graphql(
     description = "A random humanoid creature in the Star Wars universe every 3 seconds. Second result will be an error."
   )]
-  async fn random_human(context: &Database) -> RandomHumanStream {
+  async fn random_human(context: &AppContext) -> RandomHumanStream {
     let mut counter = 0;
 
     let context = (*context).clone();

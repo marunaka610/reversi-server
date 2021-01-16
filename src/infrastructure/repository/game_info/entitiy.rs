@@ -1,10 +1,12 @@
-use reversi_server::schema::game_infos;
-use juniper::{
-  graphql_object,
-};
+
+
 use diesel::{Queryable,Insertable};
-use super::super::{
-  database::*
+use super::super::super::{
+  super::{
+    schema::{
+      game_infos,
+    },
+  },
 };
 
 // ゲーム情報エンティティ
@@ -13,31 +15,22 @@ pub struct GameInfoEntitiy {
   pub game_id: i32,
   pub state: i32,
 }
-impl GameInfoEntitiy {
-  pub fn new(id: i32, game_state: i32) -> GameInfoEntitiy {
-    Self {
-      game_id: id,
-      state: game_state,
-    }
-  }
-}
 
-/// A humanoid creature in the Star Wars universe.
-#[graphql_object(context = Database)]
+/// フィールド取得メソッド定義
 impl GameInfoEntitiy {
-  /// T
+  /// ID
   fn game_id(&self) -> &i32 {
     &self.game_id
   }
 
-  /// 
+  /// 状態
   fn state(&self) -> &i32 {
     &self.state
   }
 }
 
 
-// ゲーム情報エンティティ
+// ゲーム情報エンティティ追加用
 #[derive(Insertable)]
 #[table_name = "game_infos"]
 pub struct NewGameInfo<'a> {

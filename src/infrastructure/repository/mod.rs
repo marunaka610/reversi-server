@@ -1,1 +1,2 @@
-pub mod game_info_repository;
+pub mod game_info;
+pub mod progress;

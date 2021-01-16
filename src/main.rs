@@ -1,6 +1,11 @@
+#[macro_use]
+extern crate diesel;
+extern crate dotenv;
+
 mod app;
 mod domain;
 mod infrastructure;
+mod schema;
 
 use actix_cors::Cors;
 use actix_web::{

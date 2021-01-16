@@ -1,10 +1,25 @@
 use juniper::{
   graphql_object,
 };
-use super::super::infrastructure::{
-  database::*,
-  entitiy::{
-    game_info_entity,
+use super::{
+  app_context::AppContext,
+  super::{
+    domain::{
+      game_info::{
+        dto::GameInfoDto,
+        service::{
+          HaveGameInfoService,
+          GameInfoService,
+        },
+      },
+      progress::{
+        dto::ProgressDto,
+        service::{
+          HaveProgressService,
+          ProgressService,
+        }
+      }
+    },
   },
 };
 
@@ -14,17 +29,27 @@ use super::super::infrastructure::{
 pub struct Query;
 
 /// The root query object of the schema
-#[graphql_object(context = Database)]
+#[graphql_object(context = AppContext)]
 impl Query {
   
-  #[graphql(arguments(id(description = "id of the game")))]
-  fn game_infos(database: &Database) -> Option<Vec<game_info_entity::GameInfoEntitiy>> {
-    database.find_list_game_info()
+  #[graphql(arguments())]
+  fn game_infos(ctx: &AppContext) -> Option<Vec<GameInfoDto>> {
+    Some(ctx.game_info_service().find_all_game_info())
   }
 
   #[graphql(arguments(id(description = "id of the game")))]
-  fn game_info(database: &Database, id: i32) -> Option<game_info_entity::GameInfoEntitiy> {
-    database.find_unique_game_info(id)
+  fn game_info(ctx: &AppContext, id: i32) -> Option<GameInfoDto> {
+    Some(ctx.game_info_service().find_unique_game_info(id))
+  }
+
+  #[graphql(arguments())]
+  fn pregresses(ctx: &AppContext) -> Option<Vec<ProgressDto>> {
+    Some(ctx.game_info_service().find_all_progress())
+  }
+
+  #[graphql(arguments(id(description = "id of game")))]
+  fn progress(ctx: &AppContext, id: i32) -> Option<ProgressDto> {
+    Some(ctx.progress_service().find_unique_progress(id))
   }
 }
 

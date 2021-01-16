@@ -4,13 +4,23 @@
 @contentType = application/json
 
 
-### ゲーム情報
+### ゲーム情報一覧
 @query_gameInfos = {gameInfos{gameId%20state}}
 GET {{baseUrl}}/graphql?query={{query_gameInfos}}
 
 
-### ゲーム情報
+### ゲーム情報単体
 @query_gameInfo = {gameInfo(id:2){gameId%20state}}
 GET {{baseUrl}}/graphql?query={{query_gameInfo}}
 
+
+
+### ゲーム進捗一覧
+@query_progresses = {progresses{gameId%}}
+GET {{baseUrl}}/graphql?query={{query_progresses}}
+
+
+### ゲーム進捗単体
+@query_progress = {progress(id:2){gameId}}
+GET {{baseUrl}}/graphql?query={{query_progress}}
 
