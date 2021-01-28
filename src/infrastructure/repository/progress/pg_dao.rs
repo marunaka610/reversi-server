@@ -1,12 +1,13 @@
-use super::{
-  dao::*,
-  entitiy::*,
-  super::super::{
-    db_connect,
-    super::schema::{
-      progresses,
-      progresses::dsl::*
+use crate::{
+  infrastructure::{
+    repository::progress::{
+      dao::*,
+      entitiy::*,
     },
+    db_connect::establish_connection,
+  },
+  schema::{
+    progresses::dsl::*
   },
 };
 use diesel::prelude::*;
@@ -16,16 +17,17 @@ pub struct ProgressPgDao {}
 
 impl ProgressDao for ProgressPgDao {
   // 全検索
-  fn find_all(&self) -> Vec<ProgressEntitiy> {
-    let connection = db_connect::establish_connection();
+  fn find_all(&self, id: i32) -> Vec<ProgressEntitiy> {
+    let connection = establish_connection();
     let results = progresses
+      .filter(game_id.eq(id))
       .load::<ProgressEntitiy>(&connection)
       .expect("Error loading posts");
       results
   }
   // 1件検索
   fn find_unique(&self, id: i32) -> ProgressEntitiy {
-    let connection = db_connect::establish_connection();
+    let connection = establish_connection();
     let results = progresses
       .filter(game_id.eq(id))
       .limit(1)
@@ -48,8 +50,6 @@ impl ProgressDao for ProgressPgDao {
 }
 
 
-
-
 #[cfg(test)]
 mod tests {
   use super::*;
@@ -57,7 +57,7 @@ mod tests {
   #[test]
   fn find_all_test() {
     let dao = ProgressPgDao{};
-    let results : Vec<ProgressEntitiy> = dao.find_all();
+    let results : Vec<ProgressEntitiy> = dao.find_all(1);
     dbg!(results.len());
     for item  in results {
       dbg!(item);

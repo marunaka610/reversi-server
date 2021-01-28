@@ -1,17 +1,16 @@
-use super::{
-  dto::ProgressDto,
-  super::super::infrastructure::repository::progress::dao::{
+use crate::{
+  domain::progress::dto::ProgressDto,
+  infrastructure::repository::progress::dao::{
     ProgressDao,
     HaveProgressDao
   }
 };
 
 pub trait ProgressService : HaveProgressDao {
-
   // 全検索
-  fn find_all_progress(&self) -> Vec<ProgressDto> {
+  fn find_all_progress(&self, id: i32) -> Vec<ProgressDto> {
     self.progress_dao()
-      .find_all()
+      .find_all(id)
       .iter()
       .map(|e| ProgressDto::from_entitiy(e))
       .collect()

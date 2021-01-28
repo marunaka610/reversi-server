@@ -1,5 +1,8 @@
 use super::{
-  entitiy::GameInfoEntitiy,
+  entitiy::{
+    GameInfoEntitiy,
+    NewGameInfo,
+  }
 };
 
 pub trait GameInfoDao {
@@ -8,7 +11,7 @@ pub trait GameInfoDao {
   // 1件検索
   fn find_unique(&self, id: i32) -> GameInfoEntitiy;
   // 1件挿入
-  fn insert(&self, gameid_param: &i32, state_param: &i32) -> usize;
+  fn insert(&self, new_game_info: NewGameInfo) -> usize;
 }
 
 pub trait HaveGameInfoDao {

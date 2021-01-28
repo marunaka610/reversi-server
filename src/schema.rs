@@ -8,6 +8,7 @@ table! {
 table! {
     progresses (game_id, piecies) {
         game_id -> Integer,
+        progress -> Integer,
         piecies -> Binary,
         time -> Timestamp,
     }

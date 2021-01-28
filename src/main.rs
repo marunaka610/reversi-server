@@ -1,12 +1,5 @@
-#[macro_use]
-extern crate diesel;
-extern crate dotenv;
 
-mod app;
-mod domain;
-mod infrastructure;
-mod schema;
-
+extern crate reversi_server;
 use actix_cors::Cors;
 use actix_web::{
     web, 
@@ -14,7 +7,7 @@ use actix_web::{
     middleware,
     HttpServer, 
 };
-use app::graphql::{
+use reversi_server::app::graphql::{
     schema, 
     subscriptions,
     graphql

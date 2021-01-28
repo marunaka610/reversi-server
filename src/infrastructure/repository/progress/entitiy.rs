@@ -1,27 +1,32 @@
 
 
+use chrono::NaiveDateTime;
 use diesel::{Queryable,Insertable};
-use super::super::super::{
-  super::{
-    schema::{
-      progresses,
-    },
+use crate::{
+  schema::{
+    progresses,
   },
 };
-use chrono::NaiveDateTime;
 
 // ゲーム情報エンティティ
 #[derive(Queryable, Debug, Clone)]
 pub struct ProgressEntitiy {
   pub game_id: i32,
+  pub progress: i32,
   pub piecies: Vec<u8>,
   pub time: NaiveDateTime,
 }
 
 impl ProgressEntitiy {
   
+  /// # ゲームID
   fn game_id(&self) -> &i32 {
     &self.game_id
+  }
+  
+  /// # ゲーム進捗
+  fn progress(&self) -> &i32 {
+    &self.progress
   }
 
   fn piecies(&self) -> &Vec<u8> {

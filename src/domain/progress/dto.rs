@@ -1,15 +1,13 @@
+use diesel::{Queryable};
+use chrono::NaiveDateTime;
 use juniper::{
   graphql_object,
   GraphQLEnum,
 };
-use super::{
-  super::super::{
-    app::app_context::AppContext,
-    infrastructure::repository::progress::entitiy::ProgressEntitiy,
-  },
+use crate::{
+  app::app_context::AppContext,
+  infrastructure::repository::progress::entitiy::ProgressEntitiy,
 };
-use diesel::{Queryable};
-use chrono::NaiveDateTime;
 
 // Progress
 #[derive(Queryable, Debug, Clone)]

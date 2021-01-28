@@ -1,12 +1,14 @@
-use super::{
-  dao::*,
-  entitiy::*,
-  super::super::{
-    db_connect,
-    super::schema::{
-      game_infos,
-      game_infos::dsl::*
+use crate::{
+  infrastructure::{
+    repository::game_info::{
+      dao::*,
+      entitiy::*,
     },
+    db_connect::establish_connection,
+  },
+  schema::{
+    game_infos,
+    game_infos::dsl::*
   },
 };
 use diesel::prelude::*;
@@ -17,7 +19,7 @@ pub struct GameInfoPgDao {}
 impl GameInfoDao for GameInfoPgDao {
   // 全検索
   fn find_all(&self) -> Vec<GameInfoEntitiy> {
-    let connection = db_connect::establish_connection();
+    let connection = establish_connection();
     let results = game_infos
       .load::<GameInfoEntitiy>(&connection)
       .expect("Error loading posts");
@@ -25,7 +27,7 @@ impl GameInfoDao for GameInfoPgDao {
   }
   // 1件検索
   fn find_unique(&self, id: i32) -> GameInfoEntitiy {
-    let connection = db_connect::establish_connection();
+    let connection = establish_connection();
     let results = game_infos
       .filter(game_id.eq(id))
       .limit(1)
@@ -35,13 +37,13 @@ impl GameInfoDao for GameInfoPgDao {
   }
 
   // 1件挿入
-  fn insert(&self, gameid_param: &i32, state_param: &i32) -> usize {
+  fn insert(&self, new_game_info: NewGameInfo) -> usize {
 
-    let connection = db_connect::establish_connection();
-    let new = NewGameInfo{game_id : gameid_param, state : state_param};
+    let connection = establish_connection();
+    // let new = NewGameInfo{game_id : gameid_param, state : state_param};
 
     diesel::insert_into(game_infos::table)
-      .values(&new)
+      .values(&new_game_info)
       .execute(&connection)
       .expect("Error saving new post")
   }
@@ -82,6 +84,7 @@ mod tests {
     let dao = GameInfoPgDao{};
     let id :i32 = 4;
     let st :i32 = 4;
-    dao.insert(&id, &st);
+    let new = NewGameInfo{game_id : &id, state :&st};
+    dao.insert(new);
   }
 }

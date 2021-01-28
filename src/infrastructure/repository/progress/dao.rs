@@ -1,10 +1,8 @@
-use super::{
-  entitiy::ProgressEntitiy,
-};
+use crate::infrastructure::repository::progress::entitiy::ProgressEntitiy;
 
 pub trait ProgressDao {
   // 全検索
-  fn find_all(&self) -> Vec<ProgressEntitiy>;
+  fn find_all(&self, id: i32) -> Vec<ProgressEntitiy>;
   // 1件検索
   fn find_unique(&self, id: i32) -> ProgressEntitiy;
   // 1件挿入

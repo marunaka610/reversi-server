@@ -1,19 +1,15 @@
 #![allow(missing_docs)]
 use juniper::{
-  //
   graphql_object,
   graphql_subscription,
   DefaultScalarValue,
   FieldError,
 };
 use std::{
-  //
   pin::Pin,
   time::Duration,
 };
-use super::{
-  super::app::app_context::AppContext,
-};
+use crate::app::app_context::AppContext;
 
 // ロジックの型だとおもう
 struct RandomHuman {

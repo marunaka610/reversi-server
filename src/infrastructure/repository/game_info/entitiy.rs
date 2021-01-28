@@ -1,11 +1,7 @@
-
-
 use diesel::{Queryable,Insertable};
-use super::super::super::{
-  super::{
-    schema::{
-      game_infos,
-    },
+use crate::{
+  schema::{
+    game_infos,
   },
 };
 
@@ -28,7 +24,6 @@ impl GameInfoEntitiy {
     &self.state
   }
 }
-
 
 // ゲーム情報エンティティ追加用
 #[derive(Insertable)]

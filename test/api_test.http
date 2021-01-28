@@ -10,17 +10,16 @@ GET {{baseUrl}}/graphql?query={{query_gameInfos}}
 
 
 ### ゲーム情報単体
-@query_gameInfo = {gameInfo(id:2){gameId%20state}}
+@query_gameInfo = {gameInfo(id:2){gameId%20state%20progresses{piecies%20time}}}
 GET {{baseUrl}}/graphql?query={{query_gameInfo}}
 
 
-
 ### ゲーム進捗一覧
-@query_progresses = {progresses{gameId%}}
+@query_progresses = {pregresses(id:2){gameId%20piecies%20time}}
 GET {{baseUrl}}/graphql?query={{query_progresses}}
 
 
 ### ゲーム進捗単体
-@query_progress = {progress(id:2){gameId}}
+@query_progress = {progressLast(id:2){gameId}}
 GET {{baseUrl}}/graphql?query={{query_progress}}
 

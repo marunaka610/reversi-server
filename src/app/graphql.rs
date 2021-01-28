@@ -1,34 +1,26 @@
 use actix_web::{
-  //
   web,
   Error,
   HttpRequest,
   HttpResponse,
 };
 use juniper::{
-  //
   EmptyMutation,
   RootNode,
 };
 use juniper_actix::{
-  //
   graphql_handler,
   subscriptions::subscriptions_handler,
 };
 use juniper_graphql_ws::ConnectionConfig;
-use super::{
-  query::*,
-  super::{
-    app::app_context::AppContext,
-    infrastructure::database::{
-    //
-    // Database,
-    Subscription,
-    }  
-  }
+use crate::{
+  app::{
+    app_context::AppContext,
+    query::*,
+  },
+  infrastructure::database::Subscription,
 };
 use std::{
-  // 
   time::Duration,
 };
 

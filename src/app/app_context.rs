@@ -1,4 +1,5 @@
-use super::super::{
+//! Appのコンポーネント群
+use crate::{
   domain::{
     game_info::service::{
       HaveGameInfoService,
@@ -27,6 +28,7 @@ use juniper::{
 };
 
 
+/// # Appのコンポーネント群
 #[derive(Default, Clone)]
 pub struct AppContext {
   pub game_info_dao: GameInfoPgDao,
@@ -34,6 +36,7 @@ pub struct AppContext {
 
 }
 
+/// ## 基本メソッド
 impl AppContext {
   pub fn new() -> AppContext {
     AppContext {
@@ -60,14 +63,18 @@ impl HaveProgressService for AppContext{
 }
 
 impl HaveGameInfoDao for AppContext {
+  /// ゲーム情報取得DAOの型
   type GameInfoDao = GameInfoPgDao;
+  /// ゲーム情報取得DAOのinstance取得
   fn game_info_dao(&self) -> &Self::GameInfoDao {
     &self.game_info_dao
   } 
 }
 
 impl HaveProgressDao for AppContext {
+  /// ゲーム進捗取得DAOの型
   type ProgressDao = ProgressPgDao;
+  /// ゲーム進捗取得DAOのinstance取得
   fn progress_dao(&self) -> &Self::ProgressDao {
     &self.progress_dao
   } 

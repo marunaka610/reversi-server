@@ -1,34 +1,49 @@
+use diesel::{Queryable};
 use juniper::{
   graphql_object,
   GraphQLEnum,
+  FromInputValue,
+  InputValue
 };
-use super::{
-  super::super::{
-    app::app_context::AppContext,
-    infrastructure::repository::game_info::entitiy::GameInfoEntitiy,
-  },
+use crate::{
+  app::app_context::AppContext,
+  domain::progress::dto::ProgressDto,
+  infrastructure::repository::game_info::entitiy::GameInfoEntitiy,
 };
-use diesel::{Queryable};
 
 // GameInfo
-#[derive(Queryable, Debug, Clone, Copy)]
+#[derive(Queryable, Debug, Clone)]
 pub struct GameInfoDto {
   pub game_id: i32,
   pub state: GameState,
+  pub progresses: Vec<ProgressDto>,
 }
 
 #[graphql_object(context = AppContext)]
 impl GameInfoDto {
-  /// T
+  /// ゲームID
   fn game_id(&self) -> &i32 {
     &self.game_id
   }
 
-  /// 
+  /// ゲームのステータス
   fn state(&self) -> &GameState {
     &self.state
   }
+
+  /// ゲームのステータス
+  fn progresses(&self) -> &Vec<ProgressDto> {
+    &self.progresses
+  }
 }
+
+// impl FromInputValue for GameInfoDto {
+//   fn from_input_value(v: &InputValue) -> Option<Self>{
+//     GameInfoDto{
+//       game_id: v.
+//     }
+//   }
+// }
 
 impl GameInfoDto {
   // pub fn new(id: i32, game_state: GameState) -> GameInfoDto {
@@ -38,10 +53,11 @@ impl GameInfoDto {
   //   }
   // }
 
-  pub fn from_entitiy(e: &GameInfoEntitiy) -> GameInfoDto{
+  pub fn from_entitiy(e: &GameInfoEntitiy, progresses: Vec<ProgressDto>) -> GameInfoDto{
     GameInfoDto{
       game_id: e.game_id,
       state: GameState::from_i32(e.state).unwrap(),
+      progresses: progresses,
     }
   }
 }
@@ -67,9 +83,9 @@ impl GameState {
     }
   }
 
-  // pub fn to_i32(g : GameState) -> i32 {
-  //   g as i32
-  // }
+  pub fn to_i32(&self) -> i32 {
+    *self as i32
+  }
 }
 
 

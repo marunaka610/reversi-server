@@ -1,36 +1,63 @@
-use super::{
-  dto::GameInfoDto,
-  super::super::infrastructure::repository::game_info::dao::{
-    GameInfoDao,
-    HaveGameInfoDao
+use crate::{
+  domain::{
+    game_info::dto::{
+      GameInfoDto,
+      GameState
+    },
+    progress::{
+      dto::ProgressDto,
+      service::{
+        HaveProgressService,
+        ProgressService,
+      }
+    }
+  },
+  infrastructure::repository::{
+    game_info::{
+      dao::{
+        GameInfoDao,
+        HaveGameInfoDao
+      },
+      entitiy::NewGameInfo,
+    },
   }
 };
 
-pub trait GameInfoService : HaveGameInfoDao {
+pub trait GameInfoService : HaveGameInfoDao + HaveProgressService {
 
   // 全検索
   fn find_all_game_info(&self) -> Vec<GameInfoDto> {
+    let progresses: Vec<ProgressDto> = Vec::new();
     self.game_info_dao()
       .find_all()
       .iter()
-      .map(|e| GameInfoDto::from_entitiy(e))
+      .map(|e| GameInfoDto::from_entitiy(e, progresses.clone()))
       .collect()
   }
   // 1件検索
   fn find_unique_game_info(&self, id: i32) -> GameInfoDto {
   
+    let progresses: Vec<ProgressDto> = self.progress_service().find_all_progress(id);
     let entitiy = self.game_info_dao().find_unique(id);
-    GameInfoDto::from_entitiy(&entitiy)
+    GameInfoDto::from_entitiy(&entitiy, progresses)
   }
 
   // 1件挿入
-  fn insert_game_info(&self, gameid_param: &i32, state_param: &i32) -> usize {
-
-    self.game_info_dao().insert(gameid_param, state_param)
+  fn insert_game_info(&self, game_id: i32, state: i32) -> GameInfoDto {
+    let new = NewGameInfo{
+      game_id : &game_id,
+      state: &state
+    };
+    self.game_info_dao().insert(new);
+    GameInfoDto{
+      game_id: game_id, 
+      state: GameState::from_i32(state).unwrap(),
+      progresses: vec![]
+    }
   }
 }
 
-impl<T:HaveGameInfoDao> GameInfoService for T {}
+impl<T:HaveGameInfoDao + HaveProgressService> GameInfoService for T {}
 
 pub trait HaveGameInfoService {
   type T: GameInfoService;
