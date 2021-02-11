@@ -1,5 +1,3 @@
-
-
 use chrono::NaiveDateTime;
 use diesel::{Queryable,Insertable};
 use crate::{
@@ -8,7 +6,7 @@ use crate::{
   },
 };
 
-// ゲーム情報エンティティ
+// 進捗エンティティ
 #[derive(Queryable, Debug, Clone)]
 pub struct ProgressEntitiy {
   pub game_id: i32,
@@ -17,26 +15,26 @@ pub struct ProgressEntitiy {
   pub time: NaiveDateTime,
 }
 
-impl ProgressEntitiy {
+// impl ProgressEntitiy {
   
-  /// # ゲームID
-  fn game_id(&self) -> &i32 {
-    &self.game_id
-  }
+//   /// # ゲームID
+//   fn game_id(&self) -> &i32 {
+//     &self.game_id
+//   }
   
-  /// # ゲーム進捗
-  fn progress(&self) -> &i32 {
-    &self.progress
-  }
+//   /// # ゲーム進捗
+//   fn progress(&self) -> &i32 {
+//     &self.progress
+//   }
 
-  fn piecies(&self) -> &Vec<u8> {
-    &self.piecies
-  }
+//   fn piecies(&self) -> &Vec<u8> {
+//     &self.piecies
+//   }
 
-  fn time(&self) -> &NaiveDateTime {
-    &self.time
-  }
-}
+//   fn time(&self) -> &NaiveDateTime {
+//     &self.time
+//   }
+// }
 
 
 // 経過エンティティ

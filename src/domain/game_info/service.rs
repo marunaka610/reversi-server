@@ -1,65 +1,55 @@
 use crate::{
   domain::{
-    game_info::dto::{
-      GameInfoDto,
-      GameState
-    },
+    game_info::dto::{GameInfoDto, GameState},
     progress::{
       dto::ProgressDto,
-      service::{
-        HaveProgressService,
-        ProgressService,
-      }
-    }
-  },
-  infrastructure::repository::{
-    game_info::{
-      dao::{
-        GameInfoDao,
-        HaveGameInfoDao
-      },
-      entitiy::NewGameInfo,
+      service::{HaveProgressService, ProgressService},
     },
-  }
+  },
+  infrastructure::repository::game_info::{
+    dao::{GameInfoDao, HaveGameInfoDao},
+    entitiy::NewGameInfo,
+  },
 };
+use chrono::Local;
 
-pub trait GameInfoService : HaveGameInfoDao + HaveProgressService {
-
+/// # ゲーム情報サービス
+pub trait GameInfoService: HaveGameInfoDao + HaveProgressService {
   // 全検索
-  fn find_all_game_info(&self) -> Vec<GameInfoDto> {
+  fn find_all(&self) -> Vec<GameInfoDto> {
     let progresses: Vec<ProgressDto> = Vec::new();
-    self.game_info_dao()
+    self
+      .game_info_dao()
       .find_all()
       .iter()
       .map(|e| GameInfoDto::from_entitiy(e, progresses.clone()))
       .collect()
   }
   // 1件検索
-  fn find_unique_game_info(&self, id: i32) -> GameInfoDto {
-  
-    let progresses: Vec<ProgressDto> = self.progress_service().find_all_progress(id);
+  fn find_unique(&self, id: i32) -> GameInfoDto {
+    let progresses: Vec<ProgressDto> = self.progress_service().find_all(id);
     let entitiy = self.game_info_dao().find_unique(id);
     GameInfoDto::from_entitiy(&entitiy, progresses)
   }
 
   // 1件挿入
-  fn insert_game_info(&self, game_id: i32, state: i32) -> GameInfoDto {
-    let new = NewGameInfo{
-      game_id : &game_id,
-      state: &state
+  fn insert(&self) -> GameInfoDto {
+    let new = NewGameInfo {
+      state: &GameState::BlackTurn.to_i32(),
+      start_time: &Local::now().naive_local(),
     };
-    self.game_info_dao().insert(new);
-    GameInfoDto{
-      game_id: game_id, 
-      state: GameState::from_i32(state).unwrap(),
-      progresses: vec![]
-    }
+    let entitiy = self.game_info_dao().insert(new);
+
+    GameInfoDto::from_entitiy(&entitiy, vec![])
   }
 }
 
-impl<T:HaveGameInfoDao + HaveProgressService> GameInfoService for T {}
+// ジェネリクス境界を満たすもの全てに実装される？
+impl<T: HaveGameInfoDao + HaveProgressService> GameInfoService for T {}
 
+// ↑でAppContextにGameInfoServiceが実装され、このトレイと境界が満たされるので、
+// AppContext側で実装できる
 pub trait HaveGameInfoService {
-  type T: GameInfoService;
-  fn game_info_service(&self) -> &Self::T;
+  type GameInfoService: GameInfoService;
+  fn game_info_service(&self) -> &Self::GameInfoService;
 }

@@ -4,17 +4,26 @@
 @contentType = application/json
 
 
-### ゲーム情報一覧
-@query_gameInfos = {gameInfos{gameId%20state}}
+### ゲーム情報
+#### 一覧
+@query_gameInfos = {gameInfos{gameId%20state%20startTime%20endTime}}
 GET {{baseUrl}}/graphql?query={{query_gameInfos}}
 
-
-### ゲーム情報単体
-@query_gameInfo = {gameInfo(id:2){gameId%20state%20progresses{piecies%20time}}}
+#### 単体
+@query_gameInfo = {gameInfo(id:3s){gameId%20state%20progresses{piecies%20time}}}
 GET {{baseUrl}}/graphql?query={{query_gameInfo}}
 
+#### 追加
+POST {{baseUrl}}/graphql?
+content-type: application/json
 
-### ゲーム進捗一覧
+{
+  "query" : "mutation {createGameInfo(state: 2) {    gameId, state  }}"
+}
+
+
+### ゲーム進捗
+#### 一覧
 @query_progresses = {pregresses(id:2){gameId%20piecies%20time}}
 GET {{baseUrl}}/graphql?query={{query_progresses}}
 

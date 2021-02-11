@@ -1,29 +1,13 @@
-use actix_web::{
-  web,
-  Error,
-  HttpRequest,
-  HttpResponse,
+use crate::app::{
+  app_context::AppContext, mutation::Mutation, query::Query, subscription::Subscription,
 };
-use juniper::{
-  EmptyMutation,
-  RootNode,
-};
-use juniper_actix::{
-  graphql_handler,
-  subscriptions::subscriptions_handler,
-};
+use actix_web::{web, Error, HttpRequest, HttpResponse};
+use juniper::RootNode;
+use juniper_actix::{graphql_handler, subscriptions::subscriptions_handler};
 use juniper_graphql_ws::ConnectionConfig;
-use crate::{
-  app::{
-    app_context::AppContext,
-    query::*,
-  },
-  infrastructure::database::Subscription,
-};
-use std::{
-  time::Duration,
-};
+use std::time::Duration;
 
+// # Subscription
 pub async fn subscriptions(
   req: HttpRequest,
   stream: web::Payload,
@@ -37,13 +21,13 @@ pub async fn subscriptions(
   subscriptions_handler(req, stream, schema, config).await
 }
 
-// スキーマ定義
-pub type Schema = RootNode<'static, Query, EmptyMutation<AppContext>, Subscription>;
+// # スキーマ定義
+pub type Schema = RootNode<'static, Query, Mutation, Subscription>;
 pub fn schema() -> Schema {
-  Schema::new(Query, EmptyMutation::<AppContext>::new(), Subscription)
+  Schema::new(Query, Mutation, Subscription)
 }
 
-// GraphQLメソッド
+// # GraphQLメソッド
 pub async fn graphql(
   req: actix_web::HttpRequest,
   payload: actix_web::web::Payload,

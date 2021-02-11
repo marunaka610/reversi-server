@@ -1,21 +1,17 @@
-use diesel::{Queryable};
-use juniper::{
-  graphql_object,
-  GraphQLEnum,
-  FromInputValue,
-  InputValue
-};
 use crate::{
-  app::app_context::AppContext,
-  domain::progress::dto::ProgressDto,
+  app::app_context::AppContext, domain::progress::dto::ProgressDto,
   infrastructure::repository::game_info::entitiy::GameInfoEntitiy,
 };
+use diesel::Queryable;
+use juniper::{graphql_object, GraphQLEnum};
 
-// GameInfo
+// ゲーム情報
 #[derive(Queryable, Debug, Clone)]
 pub struct GameInfoDto {
   pub game_id: i32,
   pub state: GameState,
+  pub start_time: chrono::NaiveDateTime,
+  pub end_time: Option<chrono::NaiveDateTime>,
   pub progresses: Vec<ProgressDto>,
 }
 
@@ -32,6 +28,16 @@ impl GameInfoDto {
   }
 
   /// ゲームのステータス
+  fn start_time(&self) -> chrono::NaiveDateTime {
+    self.start_time
+  }
+
+  /// ゲームのステータス
+  fn end_time(&self) -> Option<chrono::NaiveDateTime> {
+    self.end_time
+  }
+
+  /// ゲームの進捗
   fn progresses(&self) -> &Vec<ProgressDto> {
     &self.progresses
   }
@@ -53,15 +59,16 @@ impl GameInfoDto {
   //   }
   // }
 
-  pub fn from_entitiy(e: &GameInfoEntitiy, progresses: Vec<ProgressDto>) -> GameInfoDto{
-    GameInfoDto{
+  pub fn from_entitiy(e: &GameInfoEntitiy, progresses: Vec<ProgressDto>) -> GameInfoDto {
+    GameInfoDto {
       game_id: e.game_id,
       state: GameState::from_i32(e.state).unwrap(),
+      start_time: e.start_time,
+      end_time: e.end_time,
       progresses: progresses,
     }
   }
 }
-
 
 #[derive(GraphQLEnum, Debug, Clone, Copy)]
 pub enum GameState {
@@ -72,14 +79,14 @@ pub enum GameState {
   Draw = 4,
 }
 impl GameState {
-  pub fn from_i32(i : i32) -> Option<GameState> {
+  pub fn from_i32(i: i32) -> Option<GameState> {
     match i {
       0 => Some(GameState::BlackTurn),
       1 => Some(GameState::WhiteTurn),
       2 => Some(GameState::BlackWon),
       3 => Some(GameState::WhiteWon),
       4 => Some(GameState::Draw),
-      _ => None
+      _ => None,
     }
   }
 
@@ -87,7 +94,6 @@ impl GameState {
     *self as i32
   }
 }
-
 
 #[cfg(test)]
 mod tests {
@@ -99,6 +105,4 @@ mod tests {
   //   assert_eq!(1, x.game_id);
   //   // assert_eq!(GameState::BlackTurn, x.state);
   // }
-
-
 }

@@ -12,6 +12,7 @@ use crate::{
   },
 };
 use diesel::prelude::*;
+use diesel::result::Error;
 
 #[derive(Default, Clone)]
 pub struct GameInfoPgDao {}
@@ -22,7 +23,7 @@ impl GameInfoDao for GameInfoPgDao {
     let connection = establish_connection();
     let results = game_infos
       .load::<GameInfoEntitiy>(&connection)
-      .expect("Error loading posts");
+      .expect("Error find all GameInfo");
       results
   }
   // 1件検索
@@ -32,32 +33,46 @@ impl GameInfoDao for GameInfoPgDao {
       .filter(game_id.eq(id))
       .limit(1)
       .load::<GameInfoEntitiy>(&connection)
-      .expect("Error loading posts");
+      .expect("Error find unique GameInfo");
       results[0]
   }
 
   // 1件挿入
-  fn insert(&self, new_game_info: NewGameInfo) -> usize {
+  fn insert(&self, new_game_info: NewGameInfo) -> GameInfoEntitiy {
 
     let connection = establish_connection();
     // let new = NewGameInfo{game_id : gameid_param, state : state_param};
-
-    diesel::insert_into(game_infos::table)
+    let result = connection.transaction::<_, Error, _>(|| {
+      diesel::insert_into(game_infos::table)
       .values(&new_game_info)
       .execute(&connection)
-      .expect("Error saving new post")
+      .expect("Error insert GameInfo");
+      
+
+      let results = game_infos
+      .limit(1)
+      .order(game_id.desc())
+      .load::<GameInfoEntitiy>(&connection)
+      .expect("Error loading posts");
+      
+      Ok(results[0])
+    });
+    result.unwrap()
   }
 }
-
-
-
 
 #[cfg(test)]
 mod tests {
   use super::*;
+  use chrono::Local;
   #[test]
   fn new() {
-    let x = GameInfoEntitiy{game_id: 1, state: 2};
+    let x = GameInfoEntitiy{
+      game_id: 1, 
+      state: 2, 
+      start_time: Local::now().naive_local(),
+      end_time: Some(Local::now().naive_local()),
+    };
     assert_eq!(1, x.game_id);
     // assert_eq!(GameState::BlackTurn, x.state);
   }
@@ -82,9 +97,8 @@ mod tests {
   #[test]
   fn insert_test() {
     let dao = GameInfoPgDao{};
-    let id :i32 = 4;
     let st :i32 = 4;
-    let new = NewGameInfo{game_id : &id, state :&st};
+    let new = NewGameInfo{ state :&st , start_time: &Local::now().naive_local()};
     dao.insert(new);
   }
 }

@@ -1,9 +1,4 @@
-use super::{
-  entitiy::{
-    GameInfoEntitiy,
-    NewGameInfo,
-  }
-};
+use crate::infrastructure::repository::game_info::entitiy::{GameInfoEntitiy, NewGameInfo};
 
 pub trait GameInfoDao {
   // 全検索
@@ -11,7 +6,7 @@ pub trait GameInfoDao {
   // 1件検索
   fn find_unique(&self, id: i32) -> GameInfoEntitiy;
   // 1件挿入
-  fn insert(&self, new_game_info: NewGameInfo) -> usize;
+  fn insert(&self, new_game_info: NewGameInfo) -> GameInfoEntitiy;
 }
 
 pub trait HaveGameInfoDao {

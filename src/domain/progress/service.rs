@@ -1,23 +1,20 @@
 use crate::{
   domain::progress::dto::ProgressDto,
-  infrastructure::repository::progress::dao::{
-    ProgressDao,
-    HaveProgressDao
-  }
+  infrastructure::repository::progress::dao::{HaveProgressDao, ProgressDao},
 };
 
-pub trait ProgressService : HaveProgressDao {
-  // 全検索
-  fn find_all_progress(&self, id: i32) -> Vec<ProgressDto> {
-    self.progress_dao()
+pub trait ProgressService: HaveProgressDao {
+  // # 全検索
+  fn find_all(&self, id: i32) -> Vec<ProgressDto> {
+    self
+      .progress_dao()
       .find_all(id)
       .iter()
       .map(|e| ProgressDto::from_entitiy(e))
       .collect()
   }
   // 1件検索
-  fn find_unique_progress(&self, id: i32) -> ProgressDto {
-  
+  fn find_unique(&self, id: i32) -> ProgressDto {
     let entitiy = self.progress_dao().find_unique(id);
     ProgressDto::from_entitiy(&entitiy)
   }
@@ -29,7 +26,7 @@ pub trait ProgressService : HaveProgressDao {
   // }
 }
 
-impl<T:HaveProgressDao> ProgressService for T {}
+impl<T: HaveProgressDao> ProgressService for T {}
 
 pub trait HaveProgressService {
   type T: ProgressService;

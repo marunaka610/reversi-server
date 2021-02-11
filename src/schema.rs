@@ -2,6 +2,8 @@ table! {
     game_infos (game_id) {
         game_id -> Integer,
         state -> Integer,
+        start_time -> Timestamp,
+        end_time -> Nullable<Timestamp>,
     }
 }
 
