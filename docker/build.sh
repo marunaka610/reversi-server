@@ -1,0 +1,1 @@
+docker build -t reversi-server:0.0 .  
