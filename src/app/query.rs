@@ -1,5 +1,5 @@
 use crate::{
-app::app_context::AppContext,
+  app::app_context::AppContext,
   domain::{
     game_info::{
       dto::GameInfoDto,

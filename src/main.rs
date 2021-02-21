@@ -1,5 +1,6 @@
 
 extern crate reversi_server;
+use dotenv::dotenv;
 use actix_cors::Cors;
 use actix_web::{
     web, 
@@ -12,9 +13,14 @@ use reversi_server::app::graphql::{
     subscriptions,
     graphql
 };
+use reversi_server::config_;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+    dotenv().ok();
+    let config = config_::Config::from_env().unwrap();
+  
+
     HttpServer::new(|| {
         App::new()
             .data(schema())
@@ -34,7 +40,7 @@ async fn main() -> std::io::Result<()> {
                     .route(web::get().to(graphql)),
             )
     })
-    .bind(format!("{}:{}", "127.0.0.1", 8080))?
+    .bind(config.server_addr.clone())?
     .run()
     .await
 }
