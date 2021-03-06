@@ -8,7 +8,7 @@ WORKDIR /reversi-server
 COPY ./boot.sh /
 RUN chmod 777 /boot.sh
 
-CMD [ "cargo run" ]
+# CMD [ "/usr/local/cargo/bin/cargo run" ]
 
 EXPOSE 8080
 
