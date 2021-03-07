@@ -10,7 +10,7 @@
 GET {{baseUrl}}/graphql?query={{query_gameInfos}}
 
 #### 単体
-@query_gameInfo = {gameInfo(id:3s){gameId%20state%20progresses{piecies%20time}}}
+@query_gameInfo = {gameInfo(id:3){gameId%20state%20progresses{piecies%20time}}}
 GET {{baseUrl}}/graphql?query={{query_gameInfo}}
 
 #### 追加
