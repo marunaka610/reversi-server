@@ -15,30 +15,22 @@ pub struct ProgressPgDao {}
 impl ProgressDao for ProgressPgDao {
     // 全検索
     fn find_all(&self, id: i32) -> Result<Vec<ProgressEntitiy>, CustomError> {
-        match establish_connection() {
-            Ok(connection) => {
-                let results = progresses
-                    .filter(game_id.eq(id))
-                    .load::<ProgressEntitiy>(&connection)
-                    .expect("Error loading posts");
-                Ok(results)
-            }
-            Err(msg) => Err(msg),
-        }
+        let connection = establish_connection()?;
+        let results = progresses
+            .filter(game_id.eq(id))
+            .load::<ProgressEntitiy>(&connection)
+            .expect("Error loading posts");
+        Ok(results)
     }
     // 1件検索
     fn find_unique(&self, id: i32) -> Result<ProgressEntitiy, CustomError> {
-        match establish_connection() {
-            Ok(connection) => {
-                let results = progresses
-                    .filter(game_id.eq(id))
-                    .limit(1)
-                    .load::<ProgressEntitiy>(&connection)
-                    .expect("Error loading posts");
-                Ok(results[0].clone())
-            }
-            Err(msg) => Err(msg),
-        }
+        let connection = establish_connection()?;
+        let results = progresses
+            .filter(game_id.eq(id))
+            .limit(1)
+            .load::<ProgressEntitiy>(&connection)
+            .expect("Error loading posts");
+        Ok(results[0].clone())
     }
 
     // 1件挿入
@@ -61,14 +53,10 @@ mod tests {
     #[test]
     fn find_all_test() {
         let dao = ProgressPgDao {};
-        match dao.find_all(1) {
-            Ok(results) => {
-                dbg!(results.len());
-                for item in results {
-                    dbg!(item);
-                }
-            }
-            Err(msg) => panic!(msg),
+        let results = dao.find_all(1).unwrap();
+        dbg!(results.len());
+        for item in results {
+            dbg!(item);
         }
     }
 
