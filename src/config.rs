@@ -4,6 +4,7 @@ use serde::Deserialize;
 #[derive(Deserialize)]
 pub struct Config {
     pub server_addr: String,
+    pub database_url: String,
 }
 
 impl Config {
