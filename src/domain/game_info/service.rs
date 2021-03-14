@@ -19,24 +19,20 @@ pub trait GameInfoService: HaveGameInfoDao + HaveProgressService {
     // 全検索
     fn find_all(&self) -> Result<Vec<GameInfoDto>, CustomError> {
         let progresses: Vec<ProgressDto> = Vec::new();
-
-        match self.game_info_dao().find_all() {
-            Ok(game_infos) => Ok(game_infos
-                .iter()
-                .map(|e| GameInfoDto::from_entitiy(e, progresses.clone()))
-                .collect()),
-            Err(msg) => Err(msg),
-        }
+        let game_infos = self
+            .game_info_dao()
+            .find_all()?
+            .iter()
+            .map(|e| GameInfoDto::from_entitiy(e, progresses.clone()))
+            .collect();
+        Ok(game_infos)
     }
     // 1件検索
     fn find_unique(&self, id: i32) -> Result<GameInfoDto, CustomError> {
-        match self.progress_service().find_all(id) {
-            Ok(progressies) => match self.game_info_dao().find_unique(id) {
-                Ok(entitiy) => Ok(GameInfoDto::from_entitiy(&entitiy, progressies)),
-                Err(msg) => Err(msg),
-            },
-            Err(msg) => Err(msg),
-        }
+        let entitiy = self.game_info_dao().find_unique(id)?;
+        let progressies = self.progress_service().find_all(id)?;
+        let game_info = GameInfoDto::from_entitiy(&entitiy, progressies);
+        Ok(game_info)
     }
 
     // 1件挿入
@@ -45,10 +41,8 @@ pub trait GameInfoService: HaveGameInfoDao + HaveProgressService {
             state: &GameState::BlackTurn.to_i32(),
             start_time: &Local::now().naive_local(),
         };
-        match self.game_info_dao().insert(new) {
-            Ok(entitiy) => Ok(GameInfoDto::from_entitiy(&entitiy, vec![])),
-            Err(msg) => Err(msg),
-        }
+        let entitiy = self.game_info_dao().insert(new)?;
+        Ok(GameInfoDto::from_entitiy(&entitiy, vec![]))
     }
 }
 

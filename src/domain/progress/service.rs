@@ -7,20 +7,18 @@ use crate::{
 pub trait ProgressService: HaveProgressDao {
     // # 全検索
     fn find_all(&self, id: i32) -> Result<Vec<ProgressDto>, CustomError> {
-        match self.progress_dao().find_all(id) {
-            Ok(entities) => Ok(entities
-                .iter()
-                .map(|e| ProgressDto::from_entitiy(e))
-                .collect()),
-            Err(msg) => Err(msg),
-        }
+        let progresses = self
+            .progress_dao()
+            .find_all(id)?
+            .iter()
+            .map(|e| ProgressDto::from_entitiy(e))
+            .collect();
+        Ok(progresses)
     }
     // 1件検索
     fn find_unique(&self, id: i32) -> Result<ProgressDto, CustomError> {
-        match self.progress_dao().find_unique(id) {
-            Ok(entitiy) => Ok(ProgressDto::from_entitiy(&entitiy)),
-            Err(msg) => Err(msg),
-        }
+        let entitiy = self.progress_dao().find_unique(id)?;
+        Ok(ProgressDto::from_entitiy(&entitiy))
     }
 
     // 1件挿入

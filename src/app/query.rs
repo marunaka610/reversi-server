@@ -23,14 +23,14 @@ impl Query {
     /// # ゲーム情報一覧
     #[graphql(arguments())]
     fn game_infos(ctx: &AppContext) -> Result<Vec<GameInfoDto>, CustomError> {
-      println!("==== call query::game_infos ====");
-      GameInfoService::find_all(ctx.game_info_service())
+        println!("==== call query::game_infos ====");
+        GameInfoService::find_all(ctx.game_info_service())
     }
     /// # ゲーム情報
     #[graphql(arguments(id(description = "id of the game")))]
     fn game_info(ctx: &AppContext, id: i32) -> Result<GameInfoDto, CustomError> {
-      println!("==== call query::game_info ====");
-      GameInfoService::find_unique(ctx.game_info_service(), id)
+        println!("==== call query::game_info ====");
+        GameInfoService::find_unique(ctx.game_info_service(), id)
     }
     /// # ゲーム進捗一覧
     #[graphql(arguments(id(description = "id of game")))]
