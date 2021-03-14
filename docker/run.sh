@@ -1,1 +1,1 @@
-docker run -p 8081:8080 -it reversi-server:latest 
+docker run -p 8081:8080 -it reversi-server:0.0 

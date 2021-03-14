@@ -1,12 +1,27 @@
 FROM rust:latest as reversi-server
 
-RUN apt install git -y
-RUN git clone https://github.com/marunaka610/reversi-server.git
+RUN apt update ;\
+  apt install git -y ;\
+  apt install -y lsb-release ;\ 
+  apt remove -y libmariadb-dev-compat libmariadb-dev ;\ 
+  wget https://dev.mysql.com/get/Downloads/MySQL-8.0/mysql-common_8.0.18-1debian10_amd64.deb \
+  https://dev.mysql.com/get/Downloads/MySQL-8.0/libmysqlclient21_8.0.18-1debian10_amd64.deb \
+  https://dev.mysql.com/get/Downloads/MySQL-8.0/mysql-community-client-core_8.0.18-1debian10_amd64.deb \
+  https://dev.mysql.com/get/Downloads/MySQL-8.0/mysql-community-client_8.0.18-1debian10_amd64.deb \
+  https://dev.mysql.com/get/Downloads/MySQL-8.0/libmysqlclient-dev_8.0.18-1debian10_amd64.deb; \
+  dpkg -i mysql-common_8.0.18-1debian10_amd64.deb \
+  libmysqlclient21_8.0.18-1debian10_amd64.deb \
+  mysql-community-client-core_8.0.18-1debian10_amd64.deb \
+  mysql-community-client_8.0.18-1debian10_amd64.deb \
+  libmysqlclient-dev_8.0.18-1debian10_amd64.deb ; \
+  git clone https://github.com/marunaka610/reversi-server.git ;\
+  cargo install cargo-watch 
+
 WORKDIR /reversi-server
 
 
-COPY ./boot.sh /
-RUN chmod 777 /boot.sh
+# COPY ./boot.sh /
+# RUN chmod 777 /boot.sh
 
 # CMD [ "/usr/local/cargo/bin/cargo run" ]
 
